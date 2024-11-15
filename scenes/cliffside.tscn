@@ -1,5 +1,6 @@
-[gd_scene load_steps=7 format=4 uid="uid://dicvlrxgmxrj3"]
+[gd_scene load_steps=9 format=4 uid="uid://dicvlrxgmxrj3"]
 
+[ext_resource type="Script" path="res://scenes/cliffside.gd" id="1_4tec0"]
 [ext_resource type="Texture2D" uid="uid://curfsy2ia0ws2" path="res://assets/sprites/tilesets/plains.png" id="1_bhfvh"]
 [ext_resource type="Texture2D" uid="uid://b4vj8neux11v0" path="res://assets/sprites/tilesets/grass.png" id="2_ac0o2"]
 [ext_resource type="PackedScene" uid="uid://ru3nkrpj126d" path="res://scenes/player.tscn" id="3_mjbjg"]
@@ -83,7 +84,11 @@ texture = ExtResource("2_ac0o2")
 sources/0 = SubResource("TileSetAtlasSource_8ojmx")
 sources/1 = SubResource("TileSetAtlasSource_ftt24")
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fh2i7"]
+size = Vector2(29, 20)
+
 [node name="Cliffside" type="Node2D"]
+script = ExtResource("1_4tec0")
 
 [node name="Map" type="Node2D" parent="."]
 
@@ -93,4 +98,13 @@ tile_map_data = PackedByteArray("AAAAAAAAAQAAAAAAAAABAAAAAQAAAAAAAAACAAAAAQAAAAA
 tile_set = SubResource("TileSet_f2rmj")
 
 [node name="Player" parent="." instance=ExtResource("3_mjbjg")]
-position = Vector2(160, 173)
+position = Vector2(156, 169)
+
+[node name="cliffside_exit" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="cliffside_exit"]
+position = Vector2(162.5, 186)
+shape = SubResource("RectangleShape2D_fh2i7")
+
+[connection signal="body_entered" from="cliffside_exit" to="." method="_on_cliffside_exit_body_entered"]
+[connection signal="body_exited" from="cliffside_exit" to="." method="_on_cliffside_exit_body_exited"]

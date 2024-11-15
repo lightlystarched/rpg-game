@@ -13,7 +13,7 @@ var player_start_posy = 0
 func finish_scene_change():
 	if transition_scene == true:
 		transition_scene = false
-		if current_scene == "Game":
-			current_scene = "Cliffside"
-		else:
-			current_scene = "Game"
+	if current_scene == "Game":
+		current_scene = "Cliffside"
+	else:
+		current_scene = "Game"
