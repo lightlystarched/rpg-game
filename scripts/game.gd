@@ -1,9 +1,14 @@
 extends Node2D
-
+@onready var player: CharacterBody2D = $Player
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	if global.game_first_loadin == true:
+		player.position.x = global.player_start_posx
+		player.position.y = global.player_start_posy
+	else:
+		player.position.x = global.player_exit_cliffside_posx
+		player.position.y = global.player_exit_cliffside_posy
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -23,7 +23,6 @@ func _physics_process(delta: float) -> void:
 	if health <= 0:
 		player_alive = false #Add end screen or respawn
 		health = 0
-		print("Player has been killed")
 		self.queue_free()
 	
 func get_input():
