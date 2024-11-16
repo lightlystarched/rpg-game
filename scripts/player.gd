@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 var enemy_in_attack_range = false
 var enemy_attack_cooldown = true
-var health = 140
+var health = 100
 var player_alive = true
 @onready var attack_cooldown: Timer = $attack_cooldown
 
@@ -19,6 +19,7 @@ func _physics_process(delta: float) -> void:
 	player_movement(delta)
 	attack()
 	enemy_attack()
+	update_health()
 	
 	if health <= 0:
 		player_alive = false #Add end screen or respawn
@@ -99,3 +100,20 @@ func _on_deal_attack_timer_timeout() -> void:
 	$deal_attack_timer.stop()
 	global.player_current_attack = false
 	attacking = false
+
+func update_health():
+	var healthbar = $healthbar
+	healthbar.value = health
+	
+	if health >= 100:
+		healthbar.visible = false
+	else:
+		healthbar.visible = true
+
+func _on_regen_timer_timeout():
+	if health < 100:
+		health = health +20
+		if health > 100:
+			health = 100
+	if health <= 0:
+		health = 0
