@@ -87,7 +87,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"death",
-"speed": 10.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -146,7 +146,7 @@ script = ExtResource("1_a31at")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_em541")
-animation = &"idle"
+animation = &"death"
 autoplay = "idle"
 offset = Vector2(0, -6)
 
@@ -167,9 +167,6 @@ shape = SubResource("CircleShape2D_pxlgj")
 position = Vector2(0, -3)
 shape = SubResource("CircleShape2D_n0a10")
 
-[node name="take_damage_cooldown" type="Timer" parent="."]
-wait_time = 0.5
-
 [node name="healthbar" type="ProgressBar" parent="."]
 modulate = Color(0.867898, 0.0222196, 2.88785e-07, 1)
 offset_left = -5.0
@@ -179,8 +176,17 @@ offset_bottom = 34.0
 scale = Vector2(0.1, 0.1)
 show_percentage = false
 
+[node name="timers" type="Node2D" parent="."]
+
+[node name="take_damage_cooldown" type="Timer" parent="timers"]
+wait_time = 0.5
+
+[node name="death_timer" type="Timer" parent="timers"]
+wait_time = 0.5
+
 [connection signal="body_entered" from="detection_area" to="." method="_on_detection_area_body_entered"]
 [connection signal="body_exited" from="detection_area" to="." method="_on_detection_area_body_exited"]
 [connection signal="body_entered" from="slime_hitbox" to="." method="_on_slime_hitbox_body_entered"]
 [connection signal="body_exited" from="slime_hitbox" to="." method="_on_slime_hitbox_body_exited"]
-[connection signal="timeout" from="take_damage_cooldown" to="." method="_on_take_damage_cooldown_timeout"]
+[connection signal="timeout" from="timers/take_damage_cooldown" to="." method="_on_take_damage_cooldown_timeout"]
+[connection signal="timeout" from="timers/death_timer" to="." method="_on_death_timer_timeout"]

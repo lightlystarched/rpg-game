@@ -5,6 +5,7 @@ var enemy_attack_cooldown = true
 var health = 100
 var player_alive = true
 @onready var attack_cooldown: Timer = $attack_cooldown
+@onready var player_hitbox = $AnimatedSprite2D/player_hitbox
 
 const SPEED = 200.0
 const ACCEL = 800
@@ -16,15 +17,18 @@ var direction = "front"
 var attacking = false
 
 func _physics_process(delta: float) -> void:
-	player_movement(delta)
-	attack()
-	enemy_attack()
-	update_health()
+	if player_alive:
+		player_movement(delta)
+		attack()
+		enemy_attack()
+		update_health()
 	
-	if health <= 0:
-		player_alive = false #Add end screen or respawn
-		health = 0
-		self.queue_free()
+		if health <= 0:
+			player_alive = false #Add end screen or respawn
+			health = 0
+			animated_sprite.play('death')
+			player_hitbox.visible = false
+			# self.queue_free()
 	
 func get_input():
 	if (Input.is_action_pressed("ui_move_right")):
@@ -83,7 +87,6 @@ func enemy_attack():
 		health = health - 20
 		enemy_attack_cooldown = false
 		attack_cooldown.start()
-		print("Health: ", health)
 
 
 func _on_attack_cooldown_timeout() -> void:

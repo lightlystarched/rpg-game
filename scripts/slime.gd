@@ -4,6 +4,10 @@ var speed = 50
 var player_chase = false
 var player = null
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var death_timer = $timers/death_timer
+@onready var detection_area = $detection_area
+@onready var slime_hitbox = $slime_hitbox
+@onready var take_damage_cooldown = $timers/take_damage_cooldown
 
 var health = 100
 var player_in_attack_zone = false
@@ -13,7 +17,7 @@ func _physics_process(delta):
 	deal_with_damage()
 	update_health()
 	
-	if player_chase:
+	if player_chase and health > 0:
 		position += (player.position - position).normalized() * speed * delta
 		move_and_collide(Vector2(0,0))
 		animated_sprite.play("walk")
@@ -22,7 +26,7 @@ func _physics_process(delta):
 			animated_sprite.flip_h = true
 		else:
 			animated_sprite.flip_h = false
-	else:
+	elif health > 0:
 		animated_sprite.play("idle")
 
 func _on_detection_area_body_entered(body):
@@ -50,11 +54,15 @@ func deal_with_damage():
 	if player_in_attack_zone and global.player_current_attack == true:
 		if can_take_damage == true:
 			health = health - 20
-			$take_damage_cooldown.start()
+			take_damage_cooldown.start()
 			can_take_damage = false
-			print("slime health = ", health)
 			if health <= 0:
-				self.queue_free()
+				#start the death animation and timer to trigger disappearance
+				print("Slime should die")
+				animated_sprite.play("death")
+				death_timer.start()
+				detection_area.visible = false
+				slime_hitbox.visible = false
 
 
 func _on_take_damage_cooldown_timeout() -> void:
@@ -68,3 +76,8 @@ func update_health():
 		healthbar.visible = false
 	else:
 		healthbar.visible = true
+
+
+func _on_death_timer_timeout():
+	print("remove body?")
+	death_timer.stop()
